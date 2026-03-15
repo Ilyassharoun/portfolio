@@ -62,7 +62,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
   useEffect(() => {
-  fetch('http://localhost:3000/api/projects')
+  fetch('https://portfolio-backend-ceqv.onrender.com/api/projects')
     .then(res => res.json())
     .then(setProjects)
     .catch(error => console.error('Failed to load projects:', error));
@@ -75,7 +75,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
 
   const loadReviews = async (projectId: string) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/reviews/${projectId}`);
+    const res = await fetch(`https://portfolio-backend-ceqv.onrender.com/api/reviews/${projectId}`);
     const data = await res.json();
     setReviews(prev => ({ ...prev, [projectId]: data }));
   } catch (error) {
@@ -106,7 +106,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
 
   setIsSubmittingReview(true);
   try {
-    const response = await fetch('http://localhost:3000/api/review', {
+    const response = await fetch('https://portfolio-backend-ceqv.onrender.com/api/review', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 

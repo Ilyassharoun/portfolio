@@ -58,7 +58,7 @@ export default function Hero({ language }: HeroProps) {
     setDownloadError(null);
     
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+      const API_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-ceqv.onrender.com/api';
       const response = await fetch(`${API_URL}/cv`, {
         method: 'GET',
         headers: {
