@@ -1,0 +1,216 @@
+/* src/components/Footer/Footer.css */
+
+/* CSS Variables */
+:root {
+  --footer-bg: #f6f6f8;
+  --footer-border: #e2e8f0;
+  --footer-text: #64748b;
+  --footer-text-secondary: #94a3b8;
+  --primary: #135bec;
+}
+
+[data-theme="dark"] {
+  --footer-bg: #101622;
+  --footer-border: #374151;
+  --footer-text: #94a3b8;
+  --footer-text-secondary: #64748b;
+  --primary: #3b82f6;
+}
+
+/* Footer Base */
+.footer {
+  padding: 3rem 1rem;
+  border-top: 1px solid var(--footer-border);
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  transition: all 0.3s ease;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Brand Section */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-logo {
+  width: 36px;
+  height: 36px;
+  background: var(--primary);
+  color: white;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.copyright {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--footer-text);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Social Links */
+.footer-social {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--footer-text);
+  background-color: transparent;
+  border: 1px solid var(--footer-border);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.social-icon:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(19, 91, 236, 0.1);
+}
+
+/* X/Twitter specific hover color */
+.social-icon[aria-label*="X"],
+.social-icon[aria-label*="Twitter"] {
+  transition: all 0.3s ease;
+}
+
+.social-icon[aria-label*="X"]:hover,
+.social-icon[aria-label*="Twitter"]:hover {
+  color: #000000;
+  border-color: #000000;
+}
+
+[data-theme="dark"] .social-icon[aria-label*="X"]:hover,
+[data-theme="dark"] .social-icon[aria-label*="Twitter"]:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .social-icon:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.social-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* X icon styling - slightly larger for better visibility */
+.social-icon[aria-label*="X"] svg,
+.social-icon[aria-label*="Twitter"] svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .footer {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer {
+    padding: 3rem 0;
+  }
+}
+
+/* Small mobile adjustments */
+@media (max-width: 767px) {
+  .footer {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .footer-brand {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .footer-social {
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .copyright {
+    text-align: center;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .footer-social {
+    gap: 0.75rem;
+  }
+  
+  .social-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .social-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Animation for social icons */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.social-icon {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.social-icon:nth-child(1) { animation-delay: 0.1s; }
+.social-icon:nth-child(2) { animation-delay: 0.2s; }
+.social-icon:nth-child(3) { animation-delay: 0.3s; }
+.social-icon:nth-child(4) { animation-delay: 0.4s; }

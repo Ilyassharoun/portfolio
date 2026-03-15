@@ -1,0 +1,653 @@
+/* src/components/Contact/Contact.css */
+
+/* Google Fonts - Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+/* Material Symbols */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* ==========================================================================
+   CSS Variables & Theme Configuration - Matching Projects/Experience
+   ========================================================================== */
+
+:root {
+  /* Background Colors */
+  --contact-bg-light: #f6f6f8;
+  --contact-bg-dark: #101622;
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #1a2130;
+  
+  /* Text Colors */
+  --text-primary-light: #0f172a;
+  --text-primary-dark: #ffffff;
+  --text-secondary-light: #475569;
+  --text-secondary-dark: #cbd5e1;
+  --text-muted-light: #64748b;
+  --text-muted-dark: #94a3b8;
+  --text-tertiary-light: #334155;
+  --text-tertiary-dark: #cbd5e1;
+  
+  /* Border Colors */
+  --border-light: #e2e8f0;
+  --border-dark: #282e39;
+  --border-light-secondary: #f1f5f9;
+  --border-dark-secondary: #1e293b;
+  
+  /* Button/Filter Backgrounds */
+  --button-bg-light: #e2e8f0;
+  --button-bg-dark: #1e293b;
+  --button-bg-hover-light: #cbd5e1;
+  --button-bg-hover-dark: #334155;
+  
+  /* Card Background */
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #1a2130;
+  
+  /* Input Background */
+  --input-bg-light: #f8fafc;
+  --input-bg-dark: #030712;
+  
+  /* Primary Colors */
+  --primary-color: #135bec;
+  --primary-hover: #1e4eb0;
+  --primary-light: rgba(19, 91, 236, 0.1);
+  
+  /* Dark mode primary colors */
+  --primary-color-dark: #60a5fa;
+  --primary-hover-dark: #3b82f6;
+  --primary-light-dark: rgba(96, 165, 250, 0.2);
+  
+  /* Shadow Colors */
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   Theme Configuration - Exactly like Projects/Experience
+   ========================================================================== */
+
+[data-theme="dark"] {
+  --contact-bg: var(--contact-bg-dark);
+  --card-bg: var(--card-bg-dark);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --text-muted: var(--text-muted-dark);
+  --text-tertiary: var(--text-tertiary-dark);
+  --border: var(--border-dark);
+  --border-secondary: var(--border-dark-secondary);
+  --button-bg: var(--button-bg-dark);
+  --button-bg-hover: var(--button-bg-hover-dark);
+  --input-bg: var(--input-bg-dark);
+  --primary: var(--primary-color-dark);
+  --primary-hover: var(--primary-hover-dark);
+  --primary-light: var(--primary-light-dark);
+  --shadow: var(--shadow-dark);
+}
+
+[data-theme="light"] {
+  --contact-bg: var(--contact-bg-light);
+  --card-bg: var(--card-bg-light);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+  --text-muted: var(--text-muted-light);
+  --text-tertiary: var(--text-tertiary-light);
+  --border: var(--border-light);
+  --border-secondary: var(--border-light-secondary);
+  --button-bg: var(--button-bg-light);
+  --button-bg-hover: var(--button-bg-hover-light);
+  --input-bg: var(--input-bg-light);
+  --primary: var(--primary-color);
+  --primary-hover: var(--primary-hover);
+  --primary-light: var(--primary-light);
+  --shadow: var(--shadow-light);
+}
+
+/* ==========================================================================
+   Base Section Styling
+   ========================================================================== */
+
+.contact-section {
+  background: var(--contact-bg);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 5rem 1rem 0;
+}
+
+.contact-container {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* ==========================================================================
+   Header Section - Matching Projects
+   ========================================================================== */
+
+.contact-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.contact-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+.contact-subtitle {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Form Wrapper - Card Style Matching Projects
+   ========================================================================== */
+
+.contact-form-wrapper {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.contact-form-wrapper:hover {
+  box-shadow: 0 20px 25px -5px var(--shadow), 0 10px 10px -5px var(--shadow);
+}
+
+/* ==========================================================================
+   Form Styles
+   ========================================================================== */
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1 1 calc(50% - 0.5rem);
+  min-width: 240px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group textarea {
+  resize: none;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Button Styles - Matching Projects
+   ========================================================================== */
+
+.btn {
+
+}
+
+.btn:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn .material-symbols-outlined {
+  font-size: 1.2rem;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ==========================================================================
+   Form Status Messages
+   ========================================================================== */
+
+.form-success {
+  color: #10b981;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.form-error {
+  color: #ef4444;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   Footer Styles - Matching Projects card styling
+   ========================================================================== */
+
+.contact-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding: 3rem 1rem;
+  background-color: var(--card-bg);
+  transition: all 0.3s ease;
+}
+
+.footer-content {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .footer-left {
+    align-items: flex-start;
+  }
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-logo .material-symbols-outlined {
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+.logo-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .copyright {
+    text-align: left;
+  }
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .footer-right {
+    align-items: flex-end;
+  }
+}
+
+/* ==========================================================================
+   Social Links - Matching Projects filter buttons
+   ========================================================================== */
+
+.social-links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--button-bg);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.social-link:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.social-link .material-symbols-outlined {
+  font-size: 1.125rem;
+}
+
+/* ==========================================================================
+   Footer Links
+   ========================================================================== */
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   Dark Mode Specific Overrides
+   ========================================================================== */
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+  background-color: var(--input-bg);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+[data-theme="dark"] .btn {
+  box-shadow: 0 10px 15px -3px rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] .form-success {
+  background-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme="dark"] .form-error {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="dark"] .social-link {
+  background-color: var(--button-bg);
+  border-color: var(--border);
+}
+
+/* ==========================================================================
+   Material Symbols Configuration
+   ========================================================================== */
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 4rem 1rem 0;
+  }
+  
+  .contact-title {
+    font-size: 1.875rem;
+  }
+  
+  .contact-subtitle {
+    font-size: 1rem;
+  }
+  
+  .contact-form-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .form-row .form-group {
+    flex: 1 1 100%;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-section {
+    padding: 3rem 0.75rem 0;
+  }
+  
+  .contact-form-wrapper {
+    padding: 1.25rem;
+  }
+  
+  .footer-content {
+    gap: 1.5rem;
+  }
+  
+  .social-links {
+    gap: 0.5rem;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   Accessibility & Print Styles
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-form-wrapper,
+  .btn,
+  .social-link,
+  .form-group input,
+  .form-group textarea {
+    transition: none;
+  }
+}
+
+@media print {
+  .contact-section {
+    background: white;
+    color: black;
+  }
+  
+  .contact-form-wrapper {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .btn,
+  .social-links,
+  .footer-links {
+    display: none;
+  }
+  /* Add to Contact.css - Form Validation Styles */
+
+.required-star {
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #ef4444;
+}
+
+.form-group input.error:focus,
+.form-group textarea.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.form-success,
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  animation: slideIn 0.3s ease;
+}
+
+.form-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.form-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.form-success .material-symbols-outlined,
+.form-error .material-symbols-outlined {
+  font-size: 1.5rem;
+}
+
+.form-success p,
+.form-error p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Disabled state */
+.form-group input:disabled,
+.form-group textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--input-bg);
+}
+
+/* Dark mode specific validation styles */
+[data-theme="dark"] .form-success {
+  background-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme="dark"] .form-error {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="dark"] .error-message {
+  color: #f87171;
+}
+
+[data-theme="dark"] .form-group input.error,
+[data-theme="dark"] .form-group textarea.error {
+  border-color: #f87171;
+}
+}
