@@ -1,7 +1,6 @@
 // src/components/Projects/Projects.tsx
 import { useEffect, useState } from 'react';
 import './Projects.css';
-import Rating from '@mui/material/Rating';
 
 
 
@@ -432,9 +431,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
           <div className="projects-grid">
             {filteredProjects.map(project => {
               const avgRating = getAverageRating(project._id);
-              const ratingCount = getRatingCount(project._id);
-              const imageUrl = projectImages[project.title] || projectImages['E-commerce Engine'];
-              
+              const ratingCount = getRatingCount(project._id);         
               return (
                 <div key={project._id} className="project-card">
                   <div 
