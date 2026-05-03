@@ -3,17 +3,29 @@ import nodemailer from "nodemailer";
 
 dotenv.config();
 
+// Force IPv4 by using Gmail's IP directly
 const transporter = nodemailer.createTransport({
-  host: "64.233.184.108", // Gmail's IPv4 address directly
-  port: 465,
-  secure: true,
+  host: "142.250.80.108", // smtp.gmail.com IPv4 address
+  port: 587,
+  secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
   tls: {
     rejectUnauthorized: false,
+    ciphers: 'SSLv3',
   },
+  // Override the default connection to force IPv4
+  socketCreator: (port: number, host: string) => {
+    const net = require('net');
+    return net.createConnection({ 
+      port, 
+      host,
+      family: 4 // Force IPv4
+    });
+  }
 });
 
 interface ContactData {
