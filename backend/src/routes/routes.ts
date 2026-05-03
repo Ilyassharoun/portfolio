@@ -55,7 +55,14 @@ const defaultPassword = process.env.DEFAULT_PASSWORD || '';
  *       500:
  *         description: Internal server error
  */
-
+router.options("/contact", (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Max-Age', '86400'); // 24 hours
+  res.status(204).send();
+});
 router.post("/contact", async (req, res) => {
   try {
     const { name, email, phone, subject, message } = req.body;
