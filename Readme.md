@@ -11,8 +11,8 @@ Built with a modern **React (Vite + TypeScript) frontend**, **Node.js/Express/Ty
 
 ## 🌐 Live Demo
 
-**Frontend:** https://your-frontend-url.onrender.com *(Replace with actual URL)*  
-**Backend API:** https://your-backend-api.onrender.com *(Replace with actual URL)*
+**Frontend:** https://portfolio-frontend-yw9o.onrender.com *(Replace with actual URL)*  
+**Backend API:** https://portfolio-backend-ceqv.onrender.com *(Replace with actual URL)*
 
 Hosted on **Render** with **MongoDB Atlas**.
 
