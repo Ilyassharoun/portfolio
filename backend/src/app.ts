@@ -48,7 +48,7 @@ const allowedOrigins = [
   'http://127.0.0.1:3000',
 ];
 
-// Apply CORS middleware
+// Apply CORS middleware - this automatically handles OPTIONS preflight
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (Swagger, Postman, curl, mobile apps)
@@ -62,7 +62,7 @@ app.use(cors({
       callback(null, true);
     } else {
       console.warn(`⚠️ CORS blocked origin: ${origin}`);
-      callback(null, true); // Allow all for now
+      callback(null, true); // Allow all for debugging
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
@@ -73,13 +73,7 @@ app.use(cors({
   optionsSuccessStatus: 204,
 }));
 
-// REMOVED: app.options('*', cors(corsOptions)); // This line was crashing your server!
-
-// Instead, use this for preflight handling
-app.options('/*', (req, res) => {
-  console.log(`🔄 OPTIONS preflight for: ${req.path}`);
-  res.status(204).send();
-});
+// DO NOT use app.options() - the cors middleware handles it automatically
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
