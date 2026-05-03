@@ -1,7 +1,11 @@
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
+import dns from "dns";
 
 dotenv.config();
+
+// Force IPv4 for all connections
+dns.setDefaultResultOrder('ipv4first');
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -9,6 +13,16 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  // Force IPv4 connection
+  tls: {
+    rejectUnauthorized: false
+  },
+  // Alternative: Use direct host configuration
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  // Don't use IPv6
+  family: 4,
 });
 
 interface ContactData {
@@ -23,7 +37,7 @@ export const sendContactEmail = async (data: ContactData) => {
 
   const mailOptions = {
     from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-    to: process.env.EMAIL_USER, // send to yourself
+    to: process.env.EMAIL_USER,
     subject: `New Contact: ${subject}`,
     html: `
       <h2>New Message From Portfolio</h2>
