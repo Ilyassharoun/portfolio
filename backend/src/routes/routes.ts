@@ -63,55 +63,55 @@ router.options("/contact", (req, res) => {
   res.header('Access-Control-Max-Age', '86400'); // 24 hours
   res.status(204).send();
 });
+// In routes.ts, inside your contact POST handler
 router.post("/contact", async (req, res) => {
   try {
     const { name, email, phone, subject, message } = req.body;
 
     // Basic validation
     if (!name || !email || !message) {
-      return res.status(400).json({
-        message: "Name, email, and message are required",
-      });
+      return res.status(400).json({ message: "Name, email, and message are required" });
     }
 
-    // Email format validation (basic)
+    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        message: "Invalid email format",
-      });
+      return res.status(400).json({ message: "Invalid email format" });
     }
 
-    // Clean formatted message
-    const fullMessage = `
-New Portfolio Contact Message
-
-Name: ${name}
-Email: ${email}
-Phone: ${phone || "Not provided"}
-Subject: ${subject || "No subject"}
-
-Message:
-${message}
-    `;
-
-    // Updated service call
+    console.log('📩 Attempting to send contact email...');
+    
+    // Call the email service
     await sendContactEmail({
       name,
       email,
       subject: subject || "Portfolio Contact",
-      message: fullMessage,
+      message: `
+        New Portfolio Contact Message
+        
+        Name: ${name}
+        Email: ${email}
+        Phone: ${phone || "Not provided"}
+        Subject: ${subject || "No subject"}
+        
+        Message:
+        ${message}
+      `,
     });
 
-    return res.status(200).json({
-      message: "Message sent successfully",
-    });
+    console.log('✅ Email sent successfully');
+    return res.status(200).json({ message: "Message sent successfully" });
 
   } catch (error) {
-    console.error("Error sending contact form email:", error);
-
-    return res.status(500).json({
+    // Log the FULL error details
+    console.error("❌ Error sending contact form email:");
+    console.error("Message:", error instanceof Error ? error.message : error);
+    console.error("Stack:", error instanceof Error ? error.stack : 'No stack trace');
+    
+    return res.status(500).json({ 
       message: "Internal server error while sending message",
+      // In development, you can include the error detail
+      detail: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined
     });
   }
 });
