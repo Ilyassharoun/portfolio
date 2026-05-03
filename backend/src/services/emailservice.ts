@@ -3,9 +3,9 @@ import nodemailer from "nodemailer";
 
 dotenv.config();
 
-// Force IPv4 by using Gmail's IP directly
+// Use Gmail's IPv4 address directly to avoid IPv6 resolution
 const transporter = nodemailer.createTransport({
-  host: "142.250.80.108", // smtp.gmail.com IPv4 address
+  host: "142.250.80.108", // Gmail SMTP IPv4 address (bypasses DNS)
   port: 587,
   secure: false,
   requireTLS: true,
@@ -15,17 +15,10 @@ const transporter = nodemailer.createTransport({
   },
   tls: {
     rejectUnauthorized: false,
-    ciphers: 'SSLv3',
+    minVersion: 'TLSv1.2',
   },
-  // Override the default connection to force IPv4
-  socketCreator: (port: number, host: string) => {
-    const net = require('net');
-    return net.createConnection({ 
-      port, 
-      host,
-      family: 4 // Force IPv4
-    });
-  }
+  // Override name to match certificate
+  name: "smtp.gmail.com",
 });
 
 interface ContactData {
@@ -37,6 +30,14 @@ interface ContactData {
 
 export const sendContactEmail = async (data: ContactData) => {
   const { name, email, subject, message } = data;
+
+  console.log('📧 Attempting to send email via IPv4...');
+  console.log('📧 Config:', {
+    host: '142.250.80.108 (Gmail IPv4)',
+    port: 587,
+    user: process.env.EMAIL_USER ? 'Set' : 'MISSING',
+    pass: process.env.EMAIL_PASS ? 'Set' : 'MISSING',
+  });
 
   const mailOptions = {
     from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
@@ -53,5 +54,12 @@ export const sendContactEmail = async (data: ContactData) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('✅ Email sent successfully:', info.messageId);
+    return info;
+  } catch (error) {
+    console.error('❌ Failed to send email:', error);
+    throw error;
+  }
 };
