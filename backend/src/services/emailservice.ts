@@ -1,24 +1,17 @@
 import dotenv from "dotenv";
-import nodemailer from "nodemailer";
+import { google } from "googleapis";
 
 dotenv.config();
 
-// Use Gmail's IPv4 address directly to avoid IPv6 resolution
-const transporter = nodemailer.createTransport({
-  host: "142.250.80.108", // Gmail SMTP IPv4 address (bypasses DNS)
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
-    minVersion: 'TLSv1.2',
-  },
-  // Override name to match certificate
-  name: "smtp.gmail.com",
+// Create OAuth2 client
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GMAIL_CLIENT_ID,
+  process.env.GMAIL_CLIENT_SECRET,
+  process.env.GMAIL_REDIRECT_URI || "https://developers.google.com/oauthplayground"
+);
+
+oauth2Client.setCredentials({
+  refresh_token: process.env.GMAIL_REFRESH_TOKEN,
 });
 
 interface ContactData {
@@ -31,35 +24,41 @@ interface ContactData {
 export const sendContactEmail = async (data: ContactData) => {
   const { name, email, subject, message } = data;
 
-  console.log('📧 Attempting to send email via IPv4...');
-  console.log('📧 Config:', {
-    host: '142.250.80.108 (Gmail IPv4)',
-    port: 587,
-    user: process.env.EMAIL_USER ? 'Set' : 'MISSING',
-    pass: process.env.EMAIL_PASS ? 'Set' : 'MISSING',
-  });
+  const gmail = google.gmail({ version: "v1", auth: oauth2Client });
 
-  const mailOptions = {
-    from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-    to: process.env.EMAIL_USER,
-    subject: `New Contact: ${subject}`,
-    html: `
-      <h2>New Message From Portfolio</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Subject:</strong> ${subject}</p>
-      <hr />
-      <p><strong>Message:</strong></p>
-      <p>${message}</p>
-    `,
-  };
+  const emailContent = [
+    `From: "Portfolio Contact" <${process.env.EMAIL_USER}>`,
+    `To: ${process.env.EMAIL_USER}`,
+    `Subject: New Contact: ${subject}`,
+    "Content-Type: text/html; charset=utf-8",
+    "",
+    `<h2>New Message From Portfolio</h2>`,
+    `<p><strong>Name:</strong> ${name}</p>`,
+    `<p><strong>Email:</strong> ${email}</p>`,
+    `<p><strong>Subject:</strong> ${subject}</p>`,
+    `<hr />`,
+    `<p><strong>Message:</strong></p>`,
+    `<p>${message}</p>`,
+  ].join("\n");
+
+  const encodedMessage = Buffer.from(emailContent)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log('✅ Email sent successfully:', info.messageId);
-    return info;
+    const response = await gmail.users.messages.send({
+      userId: "me",
+      requestBody: {
+        raw: encodedMessage,
+      },
+    });
+    
+    console.log("✅ Email sent via Gmail API:", response.data.id);
+    return response.data;
   } catch (error) {
-    console.error('❌ Failed to send email:', error);
+    console.error("❌ Gmail API error:", error);
     throw error;
   }
 };
