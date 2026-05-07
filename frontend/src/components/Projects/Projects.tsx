@@ -93,17 +93,38 @@ export default function Projects({ language, theme = 'light' }: Props) {
     }
   };
 
+  // Fetch all reviews for all projects
+  const fetchAllReviews = async (projectsList: Project[]) => {
+    try {
+      const reviewPromises = projectsList.map(project =>
+        fetch(`https://portfolio-backend-ceqv.onrender.com/api/reviews/${project._id}`)
+          .then(res => res.json())
+          .then(data => ({ projectId: project._id, reviews: data }))
+          .catch(() => ({ projectId: project._id, reviews: [] }))
+      );
+      
+      const results = await Promise.all(reviewPromises);
+      
+      const reviewsMap: Record<string, Review[]> = {};
+      results.forEach(({ projectId, reviews }) => {
+        reviewsMap[projectId] = reviews;
+      });
+      
+      setReviews(reviewsMap);
+    } catch (error) {
+      console.error('Failed to load reviews:', error);
+    }
+  };
+
   // Fetch projects with retry logic
   const fetchProjects = async () => {
     setIsLoading(true);
     setLoadError(null);
 
     try {
-      // First, check if backend is responsive
       const isAvailable = await checkBackendStatus();
       
       if (!isAvailable) {
-        // If this is the first attempt, retry after delay
         if (retryCount < 3) {
           setBackendStatus('checking');
           setTimeout(() => {
@@ -121,6 +142,9 @@ export default function Projects({ language, theme = 'light' }: Props) {
       
       const data = await response.json();
       setProjects(data);
+      
+      await fetchAllReviews(data);
+      
       setBackendStatus('available');
       setIsLoading(false);
       setRetryCount(0);
@@ -129,7 +153,6 @@ export default function Projects({ language, theme = 'light' }: Props) {
       setLoadError(error instanceof Error ? error.message : 'Failed to load projects');
       setIsLoading(false);
       
-      // Auto retry after 5 seconds if it's a network error
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
         setTimeout(() => {
           setRetryCount(prev => prev + 1);
@@ -142,7 +165,6 @@ export default function Projects({ language, theme = 'light' }: Props) {
     fetchProjects();
   }, [retryCount]);
 
-  // Apply theme to html data attribute
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
@@ -196,7 +218,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
         setReviewRating(5);
         setReviewComment('');
         setShowRatingModal(false);
-        loadReviews(currentProjectId);
+        await loadReviews(currentProjectId);
       }
     } catch (error) {
       console.error('Failed to submit review:', error);
@@ -220,11 +242,44 @@ export default function Projects({ language, theme = 'light' }: Props) {
     return categoryIcons[category as keyof typeof categoryIcons] || 'code';
   };
 
+  // Format date for reviews
+  const formatReviewDate = (createdAt?: string): string => {
+    if (!createdAt) return '';
+    
+    const date = new Date(createdAt);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (language === 'fr') {
+      if (diffMins < 1) return 'À l\'instant';
+      if (diffMins < 60) return `Il y a ${diffMins} min`;
+      if (diffHours < 24) return `Il y a ${diffHours}h`;
+      if (diffDays < 7) return `Il y a ${diffDays}j`;
+      return date.toLocaleDateString('fr-FR');
+    } else {
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins}m ago`;
+      if (diffHours < 24) return `${diffHours}h ago`;
+      if (diffDays < 7) return `${diffDays}d ago`;
+      return date.toLocaleDateString('en-US');
+    }
+  };
+
   const handleRetry = () => {
     setRetryCount(0);
     setLoadError(null);
     setBackendStatus('checking');
     fetchProjects();
+  };
+
+  // Open GitHub link
+  const openGitHub = (githubLink: string) => {
+    if (githubLink) {
+      window.open(githubLink, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const t = {
@@ -244,14 +299,12 @@ export default function Projects({ language, theme = 'light' }: Props) {
     rateProject: language === 'fr' ? 'Notez ce projet' : 'Rate this Project',
     cancel: language === 'fr' ? 'Annuler' : 'Cancel',
     projectReviews: language === 'fr' ? 'Avis' : 'Reviews',
-    viewDetails: language === 'fr' ? 'Voir les détails' : 'View Details',
+    viewDetails: language === 'fr' ? 'Voir sur GitHub' : 'View on GitHub',
     rate: language === 'fr' ? 'Noter' : 'Rate',
     average: language === 'fr' ? 'Moyenne' : 'Average',
     reviewsCount: language === 'fr' ? 'avis' : 'reviews',
     viewMore: language === 'fr' ? 'Voir plus sur GitHub' : 'View more on GitHub',
-    justNow: language === 'fr' ? 'À l\'instant' : 'Just now',
     loadMore: language === 'fr' ? 'Charger plus d\'avis' : 'Load More Reviews',
-    // New loading/error translations
     loading: language === 'fr' ? 'Chargement des projets...' : 'Loading projects...',
     backendStarting: language === 'fr' 
       ? 'Le serveur démarre. Cela peut prendre quelques instants...' 
@@ -288,7 +341,6 @@ export default function Projects({ language, theme = 'light' }: Props) {
   const currentReviews = currentProjectId ? reviews[currentProjectId] || [] : [];
   const averageRating = currentProjectId ? getAverageRating(currentProjectId) : 0;
 
-  // Calculate rating distribution
   const getRatingPercentage = (star: number) => {
     const count = currentReviews.filter(r => Math.round(r.rating) === star).length;
     return currentReviews.length > 0 ? (count / currentReviews.length) * 100 : 0;
@@ -300,14 +352,9 @@ export default function Projects({ language, theme = 'light' }: Props) {
       <div className={`modal-overlay ${showRatingModal ? 'active' : ''}`} onClick={() => setShowRatingModal(false)}>
         <div className="modal-container rating-modal" onClick={e => e.stopPropagation()}>
           <div className="px-8 pt-8 pb-4">
+            {/* REMOVED X close button - only title remains */}
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{t.rateProject}</h3>
-              <button 
-                className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
-                onClick={() => setShowRatingModal(false)}
-              >
-                <span className="material-symbols-outlined text-3xl">close</span>
-              </button>
             </div>
             
             {currentProjectId && (
@@ -461,7 +508,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
                       </div>
                       <div>
                         <p className="reviewer-name">{review.name}</p>
-                        <p className="review-time">{t.justNow}</p>
+                        <p className="review-time">{formatReviewDate(review.createdAt)}</p>
                       </div>
                     </div>
                     <div className="review-rating-stars">
@@ -513,7 +560,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
             <p className="projects-subtitle">{t.subtitle}</p>
           </div>
 
-          {/* Category Filters - Only show if not loading */}
+          {/* Category Filters */}
           {!isLoading && !loadError && (
             <div className="category-filters">
               {categories.map(cat => (
@@ -622,13 +669,25 @@ export default function Projects({ language, theme = 'light' }: Props) {
                 return (
                   <div key={project._id} className="project-card">
                     <div 
-                      className="project-image"
+                      className={`project-image project-image-${project.category}`}
                       style={{ 
                         backgroundImage: `url("${projectImages[project.title] || ''}")`,
                       }}
+                      onClick={() => openGitHub(project.githubLink)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          openGitHub(project.githubLink);
+                        }
+                      }}
                     >
                       <div className="image-overlay">
-                        <span className="view-details-btn">{t.viewDetails}</span>
+                        <span className="view-details-btn">
+                          <span className="material-symbols-outlined">open_in_new</span>
+                          {t.viewDetails}
+                        </span>
                       </div>
                     </div>
                     
@@ -687,7 +746,7 @@ export default function Projects({ language, theme = 'light' }: Props) {
             </div>
           )}
 
-          {/* View More Button - Only show if projects are loaded */}
+          {/* View More Button */}
           {!isLoading && !loadError && projects.length > 0 && (
             <div className="view-more-container">
               <a 
