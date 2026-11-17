@@ -133,87 +133,76 @@ export default function Experience({ language }: ExperienceProps) {
             </div>
           </div>
 
-          {/* Right: Stats Section */}
-          <div className="stats-section">
-            <div className="section-header">
-              <span className="material-symbols-outlined section-icon">insights</span>
-              <h2 className="section-title">
-                {language === 'fr' ? 'Aperçu' : 'Overview'}
-              </h2>
-            </div>
-
-            {/* Stats Cards */}
-            <div className="stats-cards">
-              <div className="stat-card">
-                <div className="stat-header">
-                  <span className="material-symbols-outlined stat-icon">schedule</span>
-                  <div className="stat-info">
-                    <h4 className="stat-title">{language === 'fr' ? 'Expérience' : 'Experience'}</h4>
-                    <p className="stat-subtitle">{language === 'fr' ? 'Totale' : 'Total'}</p>
-                  </div>
-                  <span className="stat-value">{content.stats.experience}</span>
-                </div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: '100%' }}
-                  ></div>
-                </div>
+          {/* Right: Modern Overview Section */}
+          <div className="overview-card-modern">
+            <div className="overview-top-header">
+              <div className="overview-icon-badge">
+                <span className="material-symbols-outlined">insights</span>
               </div>
-
-              <div className="stat-card">
-                <div className="stat-header">
-                  <span className="material-symbols-outlined stat-icon">folder</span>
-                  <div className="stat-info">
-                    <h4 className="stat-title">{language === 'fr' ? 'Projets' : 'Projects'}</h4>
-                    <p className="stat-subtitle">{language === 'fr' ? 'Livrés' : 'Delivered'}</p>
-                  </div>
-                  <span className="stat-value">{content.stats.projects}</span>
-                </div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: '100%' }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="stat-card">
-                <div className="stat-header">
-                  <span className="material-symbols-outlined stat-icon">school</span>
-                  <div className="stat-info">
-                    <h4 className="stat-title">{language === 'fr' ? 'Stages' : 'Internships'}</h4>
-                    <p className="stat-subtitle">{language === 'fr' ? 'Terminés' : 'Completed'}</p>
-                  </div>
-                  <span className="stat-value">{content.stats.internships}</span>
-                </div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: '100%' }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="stat-card">
-                <div className="stat-header">
-                  <span className="material-symbols-outlined stat-icon">code</span>
-                  <div className="stat-info">
-                    <h4 className="stat-title">{language === 'fr' ? 'Contributions' : 'Contributions'}</h4>
-                    <p className="stat-subtitle">Git</p>
-                  </div>
-                  <span className="stat-value">{content.stats.commits}</span>
-                </div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: '100%' }}
-                  ></div>
-                </div>
+              <div>
+                <h3 className="overview-main-title">
+                  {language === 'fr' ? 'Aperçu Rapide' : 'Quick Overview'}
+                </h3>
+                <p className="overview-main-subtitle">
+                  {language === 'fr' ? 'Indicateurs clés de performance' : 'Key performance indicators'}
+                </p>
               </div>
             </div>
 
-            
+            <div className="overview-metrics-list">
+              <div className="overview-metric-row">
+                <div className="metric-info">
+                  <span className="material-symbols-outlined metric-icon">schedule</span>
+                  <div>
+                    <span className="metric-label">{language === 'fr' ? 'Expérience Totale' : 'Total Experience'}</span>
+                    <span className="metric-sub">{language === 'fr' ? 'Professionnelle & Stages' : 'Professional & Internships'}</span>
+                  </div>
+                </div>
+                <div className="metric-badge-val">{content.stats.experience}</div>
+              </div>
+
+              <div className="overview-metric-row">
+                <div className="metric-info">
+                  <span className="material-symbols-outlined metric-icon">folder</span>
+                  <div>
+                    <span className="metric-label">{language === 'fr' ? 'Projets Réalisés' : 'Completed Projects'}</span>
+                    <span className="metric-sub">{language === 'fr' ? 'Web & Desktop' : 'Web & Desktop'}</span>
+                  </div>
+                </div>
+                <div className="metric-badge-val">{content.stats.projects}</div>
+              </div>
+
+              <div className="overview-metric-row">
+                <div className="metric-info">
+                  <span className="material-symbols-outlined metric-icon">school</span>
+                  <div>
+                    <span className="metric-label">{language === 'fr' ? 'Stages Effectués' : 'Internships Done'}</span>
+                    <span className="metric-sub">{language === 'fr' ? 'Entreprises partenaires' : 'Partner companies'}</span>
+                  </div>
+                </div>
+                <div className="metric-badge-val">{content.stats.internships}</div>
+              </div>
+
+              <div className="overview-metric-row">
+                <div className="metric-info">
+                  <span className="material-symbols-outlined metric-icon">code</span>
+                  <div>
+                    <span className="metric-label">{language === 'fr' ? 'Contributions Git' : 'Git Contributions'}</span>
+                    <span className="metric-sub">{language === 'fr' ? 'Commits & PRs' : 'Commits & PRs'}</span>
+                  </div>
+                </div>
+                <div className="metric-badge-val">{content.stats.commits}</div>
+              </div>
+            </div>
+
+            <div className="overview-footer-highlight">
+              <span className="material-symbols-outlined">verified</span>
+              <p>
+                {language === 'fr'
+                  ? 'Prêt pour de nouveaux défis et opportunités de développement.'
+                  : 'Ready for new challenges and software development opportunities.'}
+              </p>
+            </div>
           </div>
         </div>
 

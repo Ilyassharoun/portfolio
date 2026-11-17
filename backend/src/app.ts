@@ -4,7 +4,10 @@ import cors from 'cors';
 import { setupSwagger } from './swagger';
 import mongoose from 'mongoose';
 import routes from './routes/routes';
+import visitorRoutes from './routes/visitorRoutes';
+import authRoutes from './routes/authRoutes';
 import connectDB from './config/db';
+import path from 'path';
 
 // Load environment variables FIRST
 dotenv.config();
@@ -38,8 +41,8 @@ const port = process.env.PORT || 3000;
 
 // Allowed origins for CORS
 const allowedOrigins = [
-  'https://ilyassharoun.site',
-  'https://www.ilyassharoun.site',
+  'https://ilyassharoun.space',
+  'https://www.ilyassharoun.space',
   'http://localhost:5173',
   'http://localhost:3000',
 ];
@@ -68,6 +71,18 @@ setupSwagger(app);
 
 // Mount routes under /api
 app.use('/api', routes);
+app.use('/api/visitors', visitorRoutes);
+app.use('/api/auth', authRoutes);
+
+// Serve admin login page (only accessible via /login)
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/admin-login.html'));
+});
+
+// Serve admin dashboard (protected route)
+app.get('/admin/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/admin-dashboard.html'));
+});
 
 // Root health check
 app.get('/', (req, res) => {

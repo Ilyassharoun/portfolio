@@ -1,5 +1,6 @@
 // src/components/Navbar/Navbar.tsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 type NavbarProps = {
@@ -16,6 +17,24 @@ export default function Navbar({
   toggleLanguage
 }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleNavClick = (href: string) => {
+    setMenuOpen(false);
+    // If we are not on the home page, navigate to '/' first, then scroll
+    if (window.location.pathname !== '/') {
+      navigate('/');
+      // Delay the scroll to allow page content to load
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      // If we are on home, just scroll
+      const element = document.querySelector(href);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const navItems = [
     { label: language === 'fr' ? 'Accueil' : 'Home', href: '#profile' },
@@ -30,7 +49,11 @@ export default function Navbar({
     <nav className="navbar">
       <div className="navbar-container">
         {/* Logo/Brand */}
-        <div className="navbar-brand">
+        <div
+          className="navbar-brand"
+          onClick={() => handleNavClick('#profile')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="logo-icon">
             <span>IH</span>
           </div>
@@ -44,11 +67,14 @@ export default function Navbar({
         <div className="nav-desktop">
           <div className="nav-links">
             {navItems.map((item, index) => (
-              <a 
-                key={index} 
-                href={item.href} 
+              <a
+                key={index}
+                href={item.href}
                 className="nav-link"
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.href);
+                }}
               >
                 {item.label}
               </a>
@@ -94,11 +120,14 @@ export default function Navbar({
         <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
           <div className="mobile-nav-links">
             {navItems.map((item, index) => (
-              <a 
-                key={index} 
-                href={item.href} 
+              <a
+                key={index}
+                href={item.href}
                 className="mobile-nav-link"
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.href);
+                }}
               >
                 {item.label}
               </a>
