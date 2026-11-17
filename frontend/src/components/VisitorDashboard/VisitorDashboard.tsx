@@ -46,10 +46,10 @@ const VisitorDashboard: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const [statsResponse, visitorsResponse] = await Promise.all([
-        axios.get('http://localhost:3000/api/visitors/stats', {
+        axios.get('https://portfolio-backend-ceqv.onrender.com/api/visitors/stats', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get('http://localhost:3000/api/visitors', {
+        axios.get('https://portfolio-backend-ceqv.onrender.com/api/visitors', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);

@@ -28,7 +28,7 @@ function AppContent() {
         const hasTracked = sessionStorage.getItem('visitorTracked');
         if (hasTracked) return;
 
-        await axios.post('http://localhost:3000/api/visitors/track', {
+        await axios.post('https://portfolio-backend-ceqv.onrender.com/api/visitors/track', {
           ipAddress: 'unknown', // The backend will capture the actual IP // In a real app, you would get the actual IP
           userAgent: navigator.userAgent,
           path: location.pathname
