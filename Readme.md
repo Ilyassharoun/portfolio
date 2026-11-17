@@ -135,15 +135,8 @@ npm run dev
    - New Static Site → Connect repo → Build: `npm install && npm run build`
    - Publish dir: `dist`
 
-## 📌 Key Features
-
-- ✅ Fully responsive design (mobile-first)
-- ✅ Hero section with profile & CTA
-- ✅ About, Skills, Experience sections
-- ✅ Projects showcase with images
-- ✅ Contact form with email backend
-- ✅ REST API with Swagger docs
-- ✅ MongoDB for reviews/projects data
-- ✅ Dark/Light theme ready
-- ✅ Production-ready deployment
+### Recent Updates & Features
+- **Visitor Tracking System:** Added a system to track visitors of the portfolio.
+- **Enhanced Projects Component:** Updated CSS and TSX files for theme color updates, responsive design improvements, GitHub link opening, and review date formatting.
+- **Email Service Integration:** Updated email service utilizing Resend and Google.
 
